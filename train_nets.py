@@ -4,6 +4,7 @@ import numpy as np
 
 from pickle import dump
 
+import keras
 from keras.callbacks import ModelCheckpoint, LearningRateScheduler
 from keras.models import Model
 from keras.optimizers import Adam
@@ -58,7 +59,7 @@ def make_resnet(num_blocks=2, num_filters=32, num_outputs=1, d1=64, d2=64, word_
 def train_speck_distinguisher(num_epochs, num_rounds=7, depth=1):
     #create the network
     net = make_resnet(depth=depth, reg_param=10**-5);
-    net.compile(optimizer='adam',loss='mse',metrics=['acc']);
+    net.compile(optimizer='adam',loss=keras.losses.BinaryCrossentropy(),metrics=['acc']);
     #generate training and validation data
     X, Y = sp.make_train_data(10**7,num_rounds);
     X_eval, Y_eval = sp.make_train_data(10**6, num_rounds);
